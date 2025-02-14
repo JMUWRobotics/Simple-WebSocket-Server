@@ -88,6 +88,16 @@ namespace SimpleWeb {
 
       regex::smatch path_match;
 
+      size_t queue_size() {
+        LockGuard lock(send_queue_mutex);
+        return send_queue.size();
+      }
+
+      void clear_queue() {
+        LockGuard lock(send_queue_mutex);
+        send_queue.clear();
+      }
+
     private:
       template <typename... Args>
       Connection(std::shared_ptr<ScopeRunner> handler_runner_, long timeout_idle, Args &&...args) noexcept
